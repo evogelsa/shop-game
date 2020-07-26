@@ -1,3 +1,3 @@
 # Shop-Game
 
-creating a shop game
+Coffee Shop game reimagined. WIP.
