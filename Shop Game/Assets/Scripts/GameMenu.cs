@@ -346,8 +346,8 @@ public class GameMenu : MonoBehaviour
 
         TextMeshProUGUI servingsText = GameObject.Find("ServingsText").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI limitedText = GameObject.Find("LimitedByText").GetComponent<TextMeshProUGUI>();
-        servingsText.text = " Servings: " + min.ToString("0");
-        limitedText.text = " Limited by: " + ingredients[idx];
+        servingsText.text = "Servings: " + min.ToString("0");
+        limitedText.text = "Limited by: " + ingredients[idx];
     }
 
     public void ReturnToMenu()
