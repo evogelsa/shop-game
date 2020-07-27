@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-    public Rigidbody rb;
-    public float Thrust = 1f;
+    public Rigidbody2D rb;
+    public float thrust = 1f;
 
     // Start is called before the first frame update
     void Start() {
@@ -18,6 +18,6 @@ public class Movement : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        rb.AddForce(Thrust * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+        rb.AddForce(transform.right * -thrust);
     }
 }
