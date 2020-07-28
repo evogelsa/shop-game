@@ -22,13 +22,4 @@ public class Pedestrian : MonoBehaviour {
 
         sprite.sortingOrder = (int) (-transform.position.y/sidewalkWidth * 100);
     }
-
-    void Update()
-    {
-        if (transform.position.x < -15)
-            Destroy(gameObject);
-    }
-
-    void FixedUpdate() {
-    }
 }
