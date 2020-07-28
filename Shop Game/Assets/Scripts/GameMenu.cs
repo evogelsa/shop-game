@@ -36,8 +36,10 @@ public class GameMenu : MonoBehaviour
     private float priceMax = 10f;
     private float priceMin = 0.05f;
 
-    private void OnEnable()
+    void OnEnable()
     {
+        Time.timeScale = 0f;
+
         manageMoney = money.GetComponent<ManageMoney>();
 
         string[] amountsToLoad = new string[]{
@@ -137,7 +139,12 @@ public class GameMenu : MonoBehaviour
         }
     }
 
-    public void Update()
+    void OnDisable()
+    {
+        Time.timeScale = 1f;
+    }
+
+    void Update()
     {
         CalculateServings();
     }
