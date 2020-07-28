@@ -5,30 +5,34 @@ using TMPro;
 
 public class ManageMoney : MonoBehaviour
 {
-    public GameObject moneyObject;
+    public GameObject moneyTextObject;
 
-    private void Update()
+    private TextMeshProUGUI moneyText;
+    private float startMoney = 30f;
+
+    void OnEnable()
     {
-        TextMeshProUGUI moneyText = moneyObject.GetComponent<TextMeshProUGUI>();
-        if (PlayerPrefs.HasKey("Money"))
+        moneyText = moneyTextObject.GetComponent<TextMeshProUGUI>();
+        if (!PlayerPrefs.HasKey("Money"))
         {
-            moneyText.text = PlayerPrefs.GetFloat("Money").ToString("$0.00");
+            PlayerPrefs.SetFloat("Money", startMoney);
+            moneyText.text = startMoney.ToString("$0.00");
         }
         else
         {
-            PlayerPrefs.SetFloat("Money", 30.00f);
-            moneyText.text = 30.00f.ToString("$0.00");
+            moneyText.text = GetMoney().ToString("$0.00");
         }
     }
 
     public void SetMoney(float money)
     {
         PlayerPrefs.SetFloat("Money", money);
+        moneyText.text = GetMoney().ToString("$0.00");
     }
 
     public void AddMoney(float money)
     {
-        PlayerPrefs.SetFloat("Money", PlayerPrefs.GetFloat("Money") + money);
+        SetMoney(GetMoney() + money);
     }
 
     public float GetMoney()

@@ -33,9 +33,6 @@ public class GameMenu : MonoBehaviour
     private float sugarCost25 = 6.25f;
     private float sugarCost50 = 8f;
 
-    private float priceMax = 10f;
-    private float priceMin = 0.05f;
-
     void OnEnable()
     {
         Time.timeScale = 0f;
@@ -98,21 +95,6 @@ public class GameMenu : MonoBehaviour
             {
                 PlayerPrefs.SetFloat(recipe, 0) ;
             }
-        }
-
-        GameObject priceObject = GameObject.Find("PriceSlider");
-        Slider priceSlider = priceObject.GetComponent<Slider>();
-        GameObject priceAmount = GameObject.Find("PriceAmount");
-        TextMeshProUGUI priceAmountText = priceAmount.GetComponent<TextMeshProUGUI>();
-        if (PlayerPrefs.HasKey("PriceSlider"))
-        {
-            priceSlider.value = PlayerPrefs.GetFloat("PriceSlider");
-            float price = (priceMax-priceMin)*priceSlider.value + priceMin;
-            priceAmountText.text = price.ToString("$0.00");
-        }
-        else
-        {
-            PlayerPrefs.SetFloat("PriceSlider", 0);
         }
 
         Dictionary<string, float> itemCostsToLoad = new Dictionary<string, float>()
@@ -303,15 +285,6 @@ public class GameMenu : MonoBehaviour
         PlayerPrefs.SetFloat("SugarRecipeSlider", recipe.value);
         float amount = (sugarRecipeMax-sugarRecipeMin)*recipe.value + sugarRecipeMin;
         recipeText.text = amount.ToString("0.0");
-    }
-
-    public void SetPrice(GameObject priceText)
-    {
-        Slider price = GameObject.Find("PriceSlider").GetComponent<Slider>();
-        TextMeshProUGUI text = priceText.GetComponent<TextMeshProUGUI>();
-        PlayerPrefs.SetFloat("PriceSlider", price.value);
-        float amount = (priceMax-priceMin)*price.value + priceMin;
-        text.text = amount.ToString("$0.00");
     }
 
     private void CalculateServings()
