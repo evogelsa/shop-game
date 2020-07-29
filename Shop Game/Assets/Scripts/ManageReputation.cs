@@ -6,14 +6,13 @@ using UnityEngine.UI;
 public class ManageReputation : MonoBehaviour
 {
     public GameObject reputationSliderObject;
-    private Slider reputationSlider;
+    public Slider reputationSlider;
 
     private float startReputation = .2f;
     private float maxReputation = 1f;
 
     void OnEnable()
     {
-        reputationSlider = reputationSliderObject.GetComponent<Slider>();
         if (!PlayerPrefs.HasKey("Reputation"))
         {
             PlayerPrefs.SetFloat("Reputation", startReputation);

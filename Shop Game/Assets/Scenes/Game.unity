@@ -2113,10 +2113,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148748443}
         m_TargetAssemblyTypeName: GameMenu, Assembly-CSharp
         m_MethodName: SetSugarRecipe
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 39067744}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8177,6 +8177,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: {fileID: 1225881736}
+  coffeeRecipeSlider: {fileID: 2070586947}
+  coffeeRecipeAmount: {fileID: 1520574389}
+  milkRecipeSlider: {fileID: 1278220226}
+  milkRecipeAmount: {fileID: 516758054}
+  sugarRecipeSlider: {fileID: 298627560}
+  sugarRecipeAmount: {fileID: 39067746}
 --- !u!1 &1155202899
 GameObject:
   m_ObjectHideFlags: 0
@@ -9090,10 +9096,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148748443}
         m_TargetAssemblyTypeName: GameMenu, Assembly-CSharp
         m_MethodName: SetMilkRecipe
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 516758052}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -14156,10 +14162,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148748443}
         m_TargetAssemblyTypeName: GameMenu, Assembly-CSharp
         m_MethodName: SetCoffeeRecipe
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1520574387}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

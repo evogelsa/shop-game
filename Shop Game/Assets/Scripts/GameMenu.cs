@@ -20,81 +20,91 @@ public class GameMenu : MonoBehaviour
     private float coffeeCost10 = 5f;
     private float coffeeCost25 = 8.75f;
     private float coffeeCost50 = 15f;
+    public Slider coffeeRecipeSlider;
+    public TextMeshProUGUI coffeeRecipeAmount;
 
     private float milkRecipeMax = 2f;
     private float milkRecipeMin = 0f;
     private float milkCost10 = 1f;
     private float milkCost25 = 2.25f;
     private float milkCost50 = 2.95f;
+    public Slider milkRecipeSlider;
+    public TextMeshProUGUI milkRecipeAmount;
 
     private float sugarRecipeMax = 4f;
     private float sugarRecipeMin = 0f;
     private float sugarCost10 = 3f;
     private float sugarCost25 = 6.25f;
     private float sugarCost50 = 8f;
+    public Slider sugarRecipeSlider;
+    public TextMeshProUGUI sugarRecipeAmount;
 
     void OnEnable()
     {
+        // pause game
         Time.timeScale = 0f;
 
+        // get manage money script
         manageMoney = money.GetComponent<ManageMoney>();
+
+        // init coffee slider
+        coffeeRecipeSlider.maxValue = coffeeRecipeMax;
+        if (PlayerPrefs.HasKey("CoffeeRecipe"))
+        {
+            coffeeRecipeSlider.value = PlayerPrefs.GetFloat("CoffeeRecipe");
+            coffeeRecipeAmount.text = PlayerPrefs.GetFloat("CoffeeRecipe").ToString("0.0");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("CoffeeRecipe", coffeeRecipeMin);
+            coffeeRecipeSlider.value = coffeeRecipeMin;
+            coffeeRecipeAmount.text = coffeeRecipeMin.ToString("0.0");
+        }
+        coffeeRecipeSlider.minValue = coffeeRecipeMin;
+
+        // init milk slider
+        milkRecipeSlider.maxValue = milkRecipeMax;
+        if (PlayerPrefs.HasKey("MilkRecipe"))
+        {
+            milkRecipeSlider.value = PlayerPrefs.GetFloat("MilkRecipe");
+            milkRecipeAmount.text = PlayerPrefs.GetFloat("MilkRecipe").ToString("0.0");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("MilkRecipe", milkRecipeMin);
+            milkRecipeSlider.value = milkRecipeMin;
+            milkRecipeAmount.text = milkRecipeMin.ToString("0.0");
+        }
+        milkRecipeSlider.minValue = milkRecipeMin;
+
+        // init sugar slider
+        sugarRecipeSlider.maxValue = sugarRecipeMax;
+        if (PlayerPrefs.HasKey("SugarRecipe"))
+        {
+            sugarRecipeSlider.value = PlayerPrefs.GetFloat("SugarRecipe");
+            sugarRecipeAmount.text = PlayerPrefs.GetFloat("SugarRecipe").ToString("0.0");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("SugarRecipe", sugarRecipeMin);
+            sugarRecipeSlider.value = sugarRecipeMin;
+            sugarRecipeAmount.text = sugarRecipeMin.ToString("0.0");
+        }
+        sugarRecipeSlider.minValue = sugarRecipeMin;
 
         string[] amountsToLoad = new string[]{
             "CupsInventoryAmount", "CoffeeInventoryAmount",
             "MilkInventoryAmount", "SugarInventoryAmount",
             };
 
+        // load amounts of each item owned
         foreach (string amount in amountsToLoad)
         {
-            GameObject amountObject = GameObject.Find(amount);
-            TextMeshProUGUI amountText = amountObject.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI amountText = GameObject.Find(amount).GetComponent<TextMeshProUGUI>();
             if (PlayerPrefs.HasKey(amount))
                 amountText.text = PlayerPrefs.GetInt(amount).ToString();
             else
                 PlayerPrefs.SetInt(amount, 0);
-        }
-
-        string[] recipesToLoad = new string[]{
-            "CoffeeRecipeSlider", "MilkRecipeSlider",
-            "SugarRecipeSlider"
-            };
-
-        foreach (string recipe in recipesToLoad)
-        {
-            GameObject recipeObject = GameObject.Find(recipe);
-            Slider recipeSlider = recipeObject.GetComponent<Slider>();
-            if (PlayerPrefs.HasKey(recipe))
-            {
-                recipeSlider.value = PlayerPrefs.GetFloat(recipe);
-                GameObject label;
-                TextMeshProUGUI labelText;
-                float amount;
-                switch (recipe)
-                {
-                    case "CoffeeRecipeSlider":
-                        label = GameObject.Find("CoffeeRecipeAmount");
-                        labelText = label.GetComponent<TextMeshProUGUI>();
-                        amount = (coffeeRecipeMax-coffeeRecipeMin)*recipeSlider.value + coffeeRecipeMin;
-                        labelText.text = amount.ToString("0.0");
-                        break;
-                    case "MilkRecipeSlider":
-                        label = GameObject.Find("MilkRecipeAmount");
-                        labelText = label.GetComponent<TextMeshProUGUI>();
-                        amount = (milkRecipeMax-milkRecipeMin)*recipeSlider.value + milkRecipeMin;
-                        labelText.text = amount.ToString("0.0");
-                        break;
-                    case "SugarRecipeSlider":
-                        label = GameObject.Find("SugarRecipeAmount");
-                        labelText = label.GetComponent<TextMeshProUGUI>();
-                        amount = (sugarRecipeMax-sugarRecipeMin)*recipeSlider.value + sugarRecipeMin;
-                        labelText.text = amount.ToString("0.0");
-                        break;
-                }
-            }
-            else 
-            {
-                PlayerPrefs.SetFloat(recipe, 0) ;
-            }
         }
 
         Dictionary<string, float> itemCostsToLoad = new Dictionary<string, float>()
@@ -260,31 +270,22 @@ public class GameMenu : MonoBehaviour
         }
     }
 
-    public void SetCoffeeRecipe(GameObject item)
+    public void SetCoffeeRecipe()
     {
-        Slider recipe = GameObject.Find("CoffeeRecipeSlider").GetComponent<Slider>();
-        TextMeshProUGUI recipeText = item.GetComponent<TextMeshProUGUI>();
-        PlayerPrefs.SetFloat("CoffeeRecipeSlider", recipe.value);
-        float amount = (coffeeRecipeMax-coffeeRecipeMin)*recipe.value + coffeeRecipeMin;
-        recipeText.text = amount.ToString("0.0");
+        PlayerPrefs.SetFloat("CoffeeRecipe", coffeeRecipeSlider.value);
+        coffeeRecipeAmount.text = coffeeRecipeSlider.value.ToString("0.0");
     }
 
-    public void SetMilkRecipe(GameObject item)
+    public void SetMilkRecipe()
     {
-        Slider recipe = GameObject.Find("MilkRecipeSlider").GetComponent<Slider>();
-        TextMeshProUGUI recipeText = item.GetComponent<TextMeshProUGUI>();
-        PlayerPrefs.SetFloat("MilkRecipeSlider", recipe.value);
-        float amount = (milkRecipeMax-milkRecipeMin)*recipe.value + milkRecipeMin;
-        recipeText.text = amount.ToString("0.0");
+        PlayerPrefs.SetFloat("MilkRecipe", milkRecipeSlider.value);
+        milkRecipeAmount.text = milkRecipeSlider.value.ToString("0.0");
     }
 
-    public void SetSugarRecipe(GameObject item)
+    public void SetSugarRecipe()
     {
-        Slider recipe = GameObject.Find("SugarRecipeSlider").GetComponent<Slider>();
-        TextMeshProUGUI recipeText = item.GetComponent<TextMeshProUGUI>();
-        PlayerPrefs.SetFloat("SugarRecipeSlider", recipe.value);
-        float amount = (sugarRecipeMax-sugarRecipeMin)*recipe.value + sugarRecipeMin;
-        recipeText.text = amount.ToString("0.0");
+        PlayerPrefs.SetFloat("SugarRecipe", sugarRecipeSlider.value);
+        sugarRecipeAmount.text = sugarRecipeSlider.value.ToString("0.0");
     }
 
     private void CalculateServings()
@@ -295,11 +296,11 @@ public class GameMenu : MonoBehaviour
         int sugarAmount = PlayerPrefs.GetInt("SugarInventoryAmount");
 
         float cupsPerServing = 1f;
-        float coffeePerServing = (PlayerPrefs.GetFloat("CoffeeRecipeSlider") * 
+        float coffeePerServing = (PlayerPrefs.GetFloat("CoffeeRecipe") * 
                 (coffeeRecipeMax-coffeeRecipeMin) + coffeeRecipeMin);
-        float milkPerServing = (PlayerPrefs.GetFloat("MilkRecipeSlider") *
+        float milkPerServing = (PlayerPrefs.GetFloat("MilkRecipe") *
                 (milkRecipeMax-milkRecipeMin) + milkRecipeMin);
-        float sugarPerServing = (PlayerPrefs.GetFloat("SugarRecipeSlider") *
+        float sugarPerServing = (PlayerPrefs.GetFloat("SugarRecipe") *
                 (sugarRecipeMax-sugarRecipeMin) + sugarRecipeMin);
 
         float cupServings = (cupAmount / cupsPerServing);

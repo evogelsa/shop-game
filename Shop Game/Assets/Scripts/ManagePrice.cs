@@ -6,11 +6,8 @@ using TMPro;
 
 public class ManagePrice : MonoBehaviour
 {
-    public GameObject priceAmountObject;
-    private TextMeshProUGUI priceAmount;
-
-    public GameObject priceSliderObject;
-    private Slider priceSlider;
+    public TextMeshProUGUI priceAmount;
+    public Slider priceSlider;
 
     private float priceMax = 10f;
     private float priceMin = 0.05f;
@@ -18,19 +15,19 @@ public class ManagePrice : MonoBehaviour
 
     void OnEnable()
     {
-        priceAmount = priceAmountObject.GetComponent<TextMeshProUGUI>();
-        priceSlider = priceSliderObject.GetComponent<Slider>();
         priceSlider.maxValue = priceMax;
-        priceSlider.minValue = priceMin;
-        if (!PlayerPrefs.HasKey("Price"))
+        if (PlayerPrefs.HasKey("Price"))
         {
-            PlayerPrefs.SetFloat("Price", startPrice);
-            priceAmount.text = startPrice.ToString("$0.00");
+            priceSlider.value = GetPrice();
+            priceAmount.text = GetPrice().ToString("$0.00");
         }
         else
         {
-            priceAmount.text = GetPrice().ToString("$0.00");
+            PlayerPrefs.SetFloat("Price", startPrice);
+            priceSlider.value = startPrice;
+            priceAmount.text = startPrice.ToString("$0.00");
         }
+        priceSlider.minValue = priceMin;
     }
 
     public void SetPrice()
