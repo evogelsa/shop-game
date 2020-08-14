@@ -9,6 +9,7 @@ public class GameMenu : MonoBehaviour
 {
     public GameObject money;
     private ManageMoney manageMoney;
+    private ManageResources manageResources;
 
     // ingredient settings
     private float cupsCost10 = 2f;
@@ -39,13 +40,22 @@ public class GameMenu : MonoBehaviour
     public Slider sugarRecipeSlider;
     public TextMeshProUGUI sugarRecipeAmount;
 
-    void OnEnable()
+    private TextMeshProUGUI servingsText;
+    private TextMeshProUGUI limitedText;
+
+
+    void Start()
     {
         // pause game
         Time.timeScale = 0f;
 
         // get manage money script
         manageMoney = money.GetComponent<ManageMoney>();
+        // get manage resources script
+        manageResources = gameObject.GetComponent<ManageResources>();
+
+        servingsText = GameObject.Find("ServingsText").GetComponent<TextMeshProUGUI>();
+        limitedText = GameObject.Find("LimitedByText").GetComponent<TextMeshProUGUI>();
 
         // init coffee slider
         coffeeRecipeSlider.maxValue = coffeeRecipeMax;
@@ -133,140 +143,121 @@ public class GameMenu : MonoBehaviour
 
     void OnDisable()
     {
+        // resume game
         Time.timeScale = 1f;
     }
 
     void Update()
     {
-        CalculateServings();
+        // refresh amount of possible servings given recipe
+        UpdateServings();
     }
 
     public void Buy10(GameObject item)
     {
         TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
-        bool success = false;
         switch (item.name)
         {
             case "CupsInventoryAmount":
                 if (manageMoney.HasEnough(cupsCost10))
                 {
                     manageMoney.AddMoney(-cupsCost10);
-                    success = true;
+                    manageResources.AddCups(10f);
                 }
                 break;
             case "CoffeeInventoryAmount":
                 if (manageMoney.HasEnough(coffeeCost10))
                 {
                     manageMoney.AddMoney(-coffeeCost10);
-                    success = true;
+                    manageResources.AddCoffee(10f);
                 }
                 break;
             case "MilkInventoryAmount":
                 if (manageMoney.HasEnough(milkCost10))
                 {
                     manageMoney.AddMoney(-milkCost10);
-                    success = true;
+                    manageResources.AddMilk(10f);
                 }
                 break;
             case "SugarInventoryAmount":
                 if (manageMoney.HasEnough(sugarCost10))
                 {
                     manageMoney.AddMoney(-sugarCost10);
-                    success = true;
+                    manageResources.AddSugar(10f);
                 }
                 break;
-        }
-
-        if (success)
-        {
-            PlayerPrefs.SetInt(item.name, PlayerPrefs.GetInt(item.name) + 10);
-            text.text = PlayerPrefs.GetInt(item.name).ToString();
         }
     }
 
     public void Buy25(GameObject item)
     {
         TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
-        bool success = false;
         switch (item.name)
         {
             case "CupsInventoryAmount":
                 if (manageMoney.HasEnough(cupsCost25))
                 {
                     manageMoney.AddMoney(-cupsCost25);
-                    success = true;
+                    manageResources.AddCups(25f);
                 }
                 break;
             case "CoffeeInventoryAmount":
                 if (manageMoney.HasEnough(coffeeCost25))
                 {
                     manageMoney.AddMoney(-coffeeCost25);
-                    success = true;
+                    manageResources.AddCoffee(25f);
                 }
                 break;
             case "MilkInventoryAmount":
                 if (manageMoney.HasEnough(milkCost25))
                 {
                     manageMoney.AddMoney(-milkCost25);
-                    success = true;
+                    manageResources.AddMilk(25f);
                 }
                 break;
             case "SugarInventoryAmount":
                 if (manageMoney.HasEnough(sugarCost25))
                 {
                     manageMoney.AddMoney(-sugarCost25);
-                    success = true;
+                    manageResources.AddSugar(25f);
                 }
                 break;
-        }
-
-        if (success)
-        {
-            PlayerPrefs.SetInt(item.name, PlayerPrefs.GetInt(item.name) + 25);
-            text.text = PlayerPrefs.GetInt(item.name).ToString();
         }
     }
 
     public void Buy50(GameObject item)
     {
         TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
-        bool success = false;
         switch (item.name)
         {
             case "CupsInventoryAmount":
                 if (manageMoney.HasEnough(cupsCost50))
                 {
                     manageMoney.AddMoney(-cupsCost50);
-                    success = true;
+                    manageResources.AddCups(50f);
                 }
                 break;
             case "CoffeeInventoryAmount":
                 if (manageMoney.HasEnough(coffeeCost50))
                 {
                     manageMoney.AddMoney(-coffeeCost50);
-                    success = true;
+                    manageResources.AddCoffee(50f);
                 }
                 break;
             case "MilkInventoryAmount":
                 if (manageMoney.HasEnough(milkCost50))
                 {
                     manageMoney.AddMoney(-milkCost50);
-                    success = true;
+                    manageResources.AddMilk(50f);
                 }
                 break;
             case "SugarInventoryAmount":
                 if (manageMoney.HasEnough(sugarCost50))
                 {
                     manageMoney.AddMoney(-sugarCost50);
-                    success = true;
+                    manageResources.AddSugar(50f);
                 }
                 break;
-        }
-
-        if (success)
-        {
-            PlayerPrefs.SetInt(item.name, PlayerPrefs.GetInt(item.name) + 50);
-            text.text = PlayerPrefs.GetInt(item.name).ToString();
         }
     }
 
@@ -288,47 +279,11 @@ public class GameMenu : MonoBehaviour
         sugarRecipeAmount.text = sugarRecipeSlider.value.ToString("0.0");
     }
 
-    private void CalculateServings()
+    private void UpdateServings()
     {
-        int cupAmount = PlayerPrefs.GetInt("CupsInventoryAmount");
-        int coffeeAmount = PlayerPrefs.GetInt("CoffeeInventoryAmount");
-        int milkAmount = PlayerPrefs.GetInt("MilkInventoryAmount");
-        int sugarAmount = PlayerPrefs.GetInt("SugarInventoryAmount");
-
-        float cupsPerServing = 1f;
-        float coffeePerServing = (PlayerPrefs.GetFloat("CoffeeRecipe") * 
-                (coffeeRecipeMax-coffeeRecipeMin) + coffeeRecipeMin);
-        float milkPerServing = (PlayerPrefs.GetFloat("MilkRecipe") *
-                (milkRecipeMax-milkRecipeMin) + milkRecipeMin);
-        float sugarPerServing = (PlayerPrefs.GetFloat("SugarRecipe") *
-                (sugarRecipeMax-sugarRecipeMin) + sugarRecipeMin);
-
-        float cupServings = (cupAmount / cupsPerServing);
-        float coffeeServings = (coffeeAmount / coffeePerServing);
-        float milkServings = (milkAmount / milkPerServing);
-        float sugarServings = (sugarAmount / sugarPerServing);
-
-        float[] servings = new float[]{cupServings, coffeeServings, milkServings, sugarServings};
-        string[] ingredients = new string[]{"Cups", "Coffee", "Milk", "Sugar"};
-        float min = float.MaxValue;
-        int idx = -1;
-        for (int i = 0; i < servings.Length; i++)
-        {
-            if (servings[i] < min)
-            {
-                min = servings[i];
-                idx = i;
-            }
-        }
-        if (min < 0)
-            min = 0;
-        else 
-            min = (float) ((int) min);
-
-        TextMeshProUGUI servingsText = GameObject.Find("ServingsText").GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI limitedText = GameObject.Find("LimitedByText").GetComponent<TextMeshProUGUI>();
+        (int min, string limit) = manageResources.CalculateServings();
         servingsText.text = "Servings: " + min.ToString("0");
-        limitedText.text = "Limited by: " + ingredients[idx];
+        limitedText.text = "Limited by: " + limit;
     }
 
     public void ReturnToMenu()
